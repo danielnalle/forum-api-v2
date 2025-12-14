@@ -1,5 +1,4 @@
-name: Continuous Deployment
-
+name: Continuous deployment
 on:
   push:
     branches:
@@ -14,15 +13,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Dummy Deploy (Replace with actual deployment steps)
-        run: |
-          echo "Simulating deployment to EC2 instance..."
-          echo "Please replace this step with your actual deployment logic."
-          echo "This typically involves:"
-          echo "1. Setting up SSH access (e.g., using 'webfactory/ssh-agent@v0.5.4' and 'appleboy/ssh-action@master')."
-          echo "2. SSHing into your EC2 instance."
-          echo "3. Pulling the latest code."
-          echo "4. Installing dependencies (npm install)."
-          echo "5. Running database migrations (npm run migrate up)."
-          echo "6. Restarting the application service (e.g., using PM2, systemd)."
-          echo "Deployment simulated successfully."
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Starting deployment on server"
+
+            cd /var/www/forum-api-v2
+
+            git pull origin main
+
+            npm install --omit=dev
+
+            export $(cat .env | xargs)
+
+            npm run migrate up
+
+            pm2 restart forum-api
+
+            echo "Deployment successful!"
