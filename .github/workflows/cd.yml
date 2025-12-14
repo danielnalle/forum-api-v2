@@ -1,0 +1,28 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Dummy Deploy (Replace with actual deployment steps)
+        run: |
+          echo "Simulating deployment to EC2 instance..."
+          echo "Please replace this step with your actual deployment logic."
+          echo "This typically involves:"
+          echo "1. Setting up SSH access (e.g., using 'webfactory/ssh-agent@v0.5.4' and 'appleboy/ssh-action@master')."
+          echo "2. SSHing into your EC2 instance."
+          echo "3. Pulling the latest code."
+          echo "4. Installing dependencies (npm install)."
+          echo "5. Running database migrations (npm run migrate up)."
+          echo "6. Restarting the application service (e.g., using PM2, systemd)."
+          echo "Deployment simulated successfully."
