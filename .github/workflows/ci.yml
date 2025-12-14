@@ -47,6 +47,8 @@ jobs:
         run: npm install
 
       - name: Run migrations
+        env:
+          DATABASE_URL: postgresql://${{ env.PGUSER_TEST }}@${{ env.PGHOST_TEST }}:${{ env.PGPORT_TEST }}/${{ env.PGDATABASE_TEST }}
         run: npm run migrate:test up
 
       - name: Run tests
