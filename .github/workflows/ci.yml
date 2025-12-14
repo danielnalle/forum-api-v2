@@ -15,7 +15,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: forumapi_test
-          POSTGRES_PASSWORD: ''
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
@@ -28,7 +28,7 @@ jobs:
       PGHOST_TEST: localhost
       PGUSER_TEST: postgres
       PGDATABASE_TEST: forumapi_test
-      PGPASSWORD_TEST: ''
+      PGPASSWORD_TEST: ""
       PGPORT_TEST: 5432
       ACCESS_TOKEN_KEY: super_secret_access_token
       REFRESH_TOKEN_KEY: super_secret_refresh_token
@@ -41,7 +41,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
