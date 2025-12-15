@@ -168,4 +168,22 @@ describe("CommentRepositoryPostgres", () => {
       expect(comments[1].likeCount).toEqual(0);
     });
   });
+
+  describe('checkAvailability function', () => {
+    it('should throw NotFoundError if comment not found', async () => {
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      await expect(commentRepositoryPostgres.checkAvailability('comment-xxx'))
+        .rejects.toThrow(NotFoundError);
+    });
+
+    it('should not throw NotFoundError if comment found', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      await expect(commentRepositoryPostgres.checkAvailability('comment-123'))
+        .resolves.not.toThrow(NotFoundError);
+    });
+  });
 });

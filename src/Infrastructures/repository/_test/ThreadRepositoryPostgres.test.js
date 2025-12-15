@@ -117,4 +117,21 @@ describe("ThreadRepositoryPostgres", () => {
       expect(thread.username).toEqual("dicoding");
     });
   });
+
+  describe('checkAvailability function', () => {
+    it('should throw NotFoundError if thread not found', async () => {
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+      await expect(threadRepositoryPostgres.checkAvailability('thread-xxx'))
+        .rejects.toThrow(NotFoundError);
+    });
+
+    it('should not throw NotFoundError if thread found', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      await expect(threadRepositoryPostgres.checkAvailability('thread-123'))
+        .resolves.not.toThrow(NotFoundError);
+    });
+  });
 });
