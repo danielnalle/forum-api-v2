@@ -22,16 +22,16 @@ jobs:
           script: |
             echo "Starting deployment on server"
 
-            cd /var/www/forum-api-v2
+            cd /home/ubuntu/forum-api-v2
 
             git pull origin main
 
             npm install --omit=dev
 
-            export $(cat .env | xargs)
+            export $(grep -v '^#' .env | xargs)
 
             npm run migrate up
 
-            pm2 restart forum-api
+            pm2 reload forum-api --update-env
 
             echo "Deployment successful!"
